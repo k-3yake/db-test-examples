@@ -66,7 +66,9 @@ class City {
     @Column(nullable = false)
     private val map: String  = ""
 
-    fun City(name: String, country: String) {
+    constructor() {    }
+
+    constructor(name: String, country: String) {
         this.name = name
         this.country = country
     }
