@@ -24,7 +24,9 @@ class CityServiceTest {
 
     @Test
     fun City取得ののテスト_Cityを返す() {
-        Mockito.doReturn(City("name1","country1")).`when`(cityRepository).findByNameAndCountryAllIgnoringCase("Brisbane","Australia")
+        Mockito.doReturn(City("name1","country1"))
+                .`when`(cityRepository)
+                .findByNameAndCountryAllIgnoringCase("Brisbane","Australia")
         val city = cityService.findCity()
         assertEquals("name1",city.getName())
         assertEquals("country1",city.getCountry())

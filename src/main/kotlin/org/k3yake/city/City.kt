@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.data.domain.PageRequest
-
-
+import org.springframework.data.jpa.repository.JpaRepository
 
 
 /**
@@ -43,9 +42,13 @@ class CityService {
     fun findCity(): City {
         return cityRepository.findByNameAndCountryAllIgnoringCase("Brisbane","Australia")
     }
+
+    fun  create(city: City) {
+        cityRepository.save(city)
+    }
 }
 
-interface CityRepository : Repository<City,Long> {
+interface CityRepository : JpaRepository<City,Long> {
     fun findByNameAndCountryAllIgnoringCase(name: String, country: String): City
 }
 
