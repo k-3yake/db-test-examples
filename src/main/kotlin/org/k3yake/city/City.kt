@@ -27,8 +27,8 @@ class CityController {
     lateinit var cityService:CityService
 
     @GetMapping("/city")
-    fun findCity() : String {
-        return cityService.findCity().toString()
+    fun findCity() : City {
+        return cityService.findCity()
     }
 }
 
