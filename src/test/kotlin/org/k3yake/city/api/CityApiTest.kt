@@ -43,7 +43,7 @@ class CityApiTest {
     }
 
     @Test
-    fun listUsers() {
+    fun getTest() {
         val resutl = this.mockMvc.perform(get("/city")
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -55,4 +55,14 @@ class CityApiTest {
                 .andReturn()
         println(resutl.response.contentAsString)
     }
+
+    @Test
+    fun putTest() {
+        this.mockMvc.perform(put("/city")
+                .content("""{"id":2,"name":"ebisu","country":"Japan"}""")
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+    }
+
 }

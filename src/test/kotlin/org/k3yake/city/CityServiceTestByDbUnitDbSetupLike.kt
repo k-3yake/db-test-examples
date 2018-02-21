@@ -66,7 +66,7 @@ class CityServiceTestByDbUnitDbSetupLike {
 
 fun table(dataSource: DataSource, name:String, config:Builder.() -> Unit):ITable{
     var builder = Builder()
-    config(builder)
+    builder.config()
     val table = DefaultTable(DatabaseConnection(dataSource.connection).createDataSet().getTable(name).tableMetaData)
     builder.values.forEachIndexed{ rowIndex,row ->
         table.addRow()
