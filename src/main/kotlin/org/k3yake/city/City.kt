@@ -103,8 +103,4 @@ class City {
     fun getMap(): String {
         return this.map
     }
-
-    override fun toString(): String {
-        return getName() + "," + getState() + "," + getCountry()
-    }
 }
