@@ -60,8 +60,9 @@ interface CityRepository : JpaRepository<City,Long> {
 @Entity
 class City {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private var id: Long = 0
+    @Id
+    var id: Long = 0
+
     @Column(nullable = false)
     private var name: String = ""
 
@@ -75,6 +76,12 @@ class City {
     private val map: String  = ""
 
     constructor() {    }
+
+    constructor(id: Long, name: String, country: String) {
+        this.id = id
+        this.name = name
+        this.country = country
+    }
 
     constructor(name: String, country: String) {
         this.name = name
