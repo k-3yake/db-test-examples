@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
  * Created by katsuki-miyake on 18/02/17.
  */
 @RunWith(MockitoJUnitRunner::class)
-class CityServiceTest {
+class CityServiceTestByRepositoryMock {
 
     @InjectMocks
     lateinit var cityService: CityService;
