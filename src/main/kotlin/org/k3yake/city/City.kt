@@ -53,6 +53,7 @@ class CityService {
     }
 }
 
+@org.springframework.stereotype.Repository
 interface CityRepository : JpaRepository<City,Long> {
     fun findByNameAndCountryAllIgnoringCase(name: String, country: String): City
 }
@@ -60,8 +61,8 @@ interface CityRepository : JpaRepository<City,Long> {
 @Entity
 class City {
 
-    @Id
-    var id: Long = 0
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private var id: Long = 0
 
     @Column(nullable = false)
     private var name: String = ""
