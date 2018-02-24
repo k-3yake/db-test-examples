@@ -4,9 +4,10 @@
 ・サービス層のテスト（DbUnit）
 ・サービス層のテスト（DbUnitのDbSetup風）
 ・APIレイヤーテスト（spring-boot-test + DbSetup）
+・APIレイヤーテスト（Controllerインジェクション + DbSetup）
 
 #DOING
-・APIレイヤーテスト（Controllerインジェクション + DbSetup）
+
 
 #TODO
 組み込みDBでIDがAutoGenerateされない
