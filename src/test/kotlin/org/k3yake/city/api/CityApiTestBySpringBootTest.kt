@@ -26,7 +26,7 @@ import javax.sql.DataSource
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = arrayOf(Application::class))
 @WebAppConfiguration
-class CityApiTest {
+class CityApiTestBySpringBootTest {
 
     @Autowired
     lateinit var wac: WebApplicationContext
