@@ -60,7 +60,7 @@ class CityServiceTestByDbUnitDbSetupLike {
                     addValues(0, "Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
                     addValues(1, "notExistCoutry", "notExistCityName", "", "")
         }
-        Assertion.assertEquals(expect, actual);
+        Assertion.assertEqualsIgnoreCols(expect, actual, arrayOf("id"));
     }
 }
 

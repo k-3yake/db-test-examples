@@ -52,10 +52,9 @@ class CityApiTestByControllerInjection {
 
     @Test
     fun putTest() {
-        val city = City(2,"ebisu","Japan")
+        val city = City("ebisu","Japan")
         this.cityController.putCity(city)
         Assertions.assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id")))).row(1)
-                .value("id").isEqualTo(2)
                 .value("name").isEqualTo("ebisu")
                 .value("country").isEqualTo("Japan")
     }

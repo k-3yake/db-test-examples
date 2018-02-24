@@ -78,12 +78,6 @@ class City {
 
     constructor() {    }
 
-    constructor(id: Long, name: String, country: String) {
-        this.id = id
-        this.name = name
-        this.country = country
-    }
-
     constructor(name: String, country: String) {
         this.name = name
         this.country = country

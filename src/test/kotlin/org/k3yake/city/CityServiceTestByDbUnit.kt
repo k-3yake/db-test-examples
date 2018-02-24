@@ -55,6 +55,6 @@ class CityServiceTestByDbUnit {
         val expectedDataSet = ReplacementDataSet(XlsDataSet(File("src/test/resources/testData_expect.xlsx")))
         expectedDataSet.addReplacementSubstring("[EmptyStr]","")
         val expectedTable = expectedDataSet.getTable("city")
-        Assertion.assertEquals(expectedTable, actualTable);
+        Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, arrayOf("id"));
     }
 }

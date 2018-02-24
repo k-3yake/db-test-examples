@@ -42,7 +42,7 @@ class CityServiceTestByDbSetup {
             deleteAllFrom("city")
             insertInto("city"){
                 columns("id", "country", "name", "state", "map")
-                values(0, "Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                values(1, "Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
             }
         }.launch()
     }
@@ -52,7 +52,6 @@ class CityServiceTestByDbSetup {
         cityService.create(City("notExistCityName", "notExistCoutry"))
         val table = Table(dataSource, "city", arrayOf(Table.Order.asc("id")))
         assertThat(table).row(1)
-                .value("id").isEqualTo(1)
                 .value("name").isEqualTo("notExistCityName")
                 .value("country").isEqualTo("notExistCoutry")
     }
