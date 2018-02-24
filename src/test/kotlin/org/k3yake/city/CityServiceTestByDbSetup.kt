@@ -41,8 +41,8 @@ class CityServiceTestByDbSetup {
         dbSetup(to = dataSource) {
             deleteAllFrom("city")
             insertInto("city"){
-                columns("id", "country", "name", "state", "map")
-                values(1, "Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                columns("country", "name", "state", "map")
+                values("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
             }
         }.launch()
     }

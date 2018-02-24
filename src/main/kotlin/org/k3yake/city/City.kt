@@ -29,8 +29,8 @@ class CityController {
         return cityService.findCity()
     }
 
-    @PutMapping("/city")
-    fun putCity(@RequestBody city: City):City {
+    @PostMapping("/city")
+    fun createCity(@RequestBody city: City):City {
         cityService.create(city)
         return city
     }

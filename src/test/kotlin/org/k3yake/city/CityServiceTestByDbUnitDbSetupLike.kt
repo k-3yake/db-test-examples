@@ -41,8 +41,8 @@ class CityServiceTestByDbUnitDbSetupLike {
         try {
             con = DatabaseConnection(dataSource.connection)
             val table = table(dataSource,"city"){
-                addColum("id", "country", "name", "state", "map")
-                addValues(0, "Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                addColum("country", "name", "state", "map")
+                addValues("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
             }
             DatabaseOperation.CLEAN_INSERT.execute(con!!, DefaultDataSet(table))
         }finally{
@@ -56,9 +56,9 @@ class CityServiceTestByDbUnitDbSetupLike {
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
         val actual = databaseDataSet.getTable("city")
         val expect = table(dataSource,"city"){
-                    addColum("id", "country", "name", "state", "map")
-                    addValues(0, "Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
-                    addValues(1, "notExistCoutry", "notExistCityName", "", "")
+                    addColum("country", "name", "state", "map")
+                    addValues("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                    addValues("notExistCoutry", "notExistCityName", "", "")
         }
         Assertion.assertEqualsIgnoreCols(expect, actual, arrayOf("id"));
     }

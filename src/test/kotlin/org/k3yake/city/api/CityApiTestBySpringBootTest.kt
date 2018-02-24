@@ -57,8 +57,8 @@ class CityApiTestBySpringBootTest {
 
     @Test
     fun putTest() {
-        this.mockMvc.perform(put("/city")
-                .content("""{"id":2, "name":"ebisu", "country":"Japan"}""".toString())
+        this.mockMvc.perform(post("/city")
+                .content("""{"name":"ebisu", "country":"Japan"}""".toString())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
