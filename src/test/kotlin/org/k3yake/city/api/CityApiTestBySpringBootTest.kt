@@ -56,7 +56,7 @@ class CityApiTestBySpringBootTest {
     }
 
     @Test
-    fun putTest() {
+    fun postTest() {
         this.mockMvc.perform(post("/city")
                 .content("""{"name":"ebisu", "country":"Japan"}""".toString())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -67,4 +67,18 @@ class CityApiTestBySpringBootTest {
                 .value("name").isEqualTo("ebisu")
                 .value("country").isEqualTo("Japan")
     }
+
+    @Test
+    fun postTest_nameがない場合_エラーになる() {
+        this.mockMvc.perform(post("/city")
+                .content("""{"country":"Japan"}""".toString())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().`is`(400))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().json("""{"message":"Empty name."}"""))
+        Assertions.assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id")))).hasNumberOfRows(1)
+    }
+
+
+
 }
