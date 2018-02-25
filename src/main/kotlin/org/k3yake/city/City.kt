@@ -64,7 +64,7 @@ class CityValidator: Validator{
 
     override fun validate(target: Any, errors: Errors) {
         var city = target as City
-        if (StringUtils.isEmpty(city.getName())){
+        if (StringUtils.isEmpty(city.name)){
             errors.reject("400","Empty name.")
         }
     }
@@ -92,43 +92,21 @@ interface CityRepository : JpaRepository<City,Long> {
 }
 
 @Entity
-class City {
+data class City(
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long = 0
+    val id: Long = 0,
 
     @Column(nullable = false)
-    private var name: String = ""
+    val name: String = "",
 
     @Column(nullable = false)
-    private var state: String  = ""
+    val state: String = "",
 
     @Column(nullable = false)
-    private var country: String  = ""
+    val country: String = "",
 
     @Column(nullable = false)
-    private val map: String  = ""
-
-    constructor() {    }
-
-    constructor(name: String, country: String) {
-        this.name = name
-        this.country = country
-    }
-
-    fun getName(): String {
-        return this.name
-    }
-
-    fun getState(): String {
-        return this.state
-    }
-
-    fun getCountry(): String {
-        return this.country
-    }
-
-    fun getMap(): String {
-        return this.map
-    }
+    val map: String = ""
+    ){
 }

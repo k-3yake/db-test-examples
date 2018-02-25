@@ -49,7 +49,7 @@ class CityServiceTestByDbUnit {
 
     @Test
     fun test(){
-        cityService.create(City("notExistCityName", "notExistCoutry"))
+        cityService.create(City(name="notExistCityName", country="notExistCoutry"))
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
         val actualTable = databaseDataSet.getTable("city")
         val expectedDataSet = ReplacementDataSet(XlsDataSet(File("src/test/resources/testData_expect.xlsx")))

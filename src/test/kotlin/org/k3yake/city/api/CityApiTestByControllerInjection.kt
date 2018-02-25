@@ -56,15 +56,15 @@ class CityApiTestByControllerInjection {
     @Test
     fun getTest() {
         var city = this.cityController.findCity()
-        assertEquals(city.getName(),"Brisbane")
-        assertEquals(city.getState(),"Queensland")
-        assertEquals(city.getCountry(),"Australia")
-        assertEquals(city.getMap(),"-27.470933, 153.023502")
+        assertEquals(city.name,"Brisbane")
+        assertEquals(city.state,"Queensland")
+        assertEquals(city.country,"Australia")
+        assertEquals(city.map,"-27.470933, 153.023502")
     }
 
     @Test
     fun createTest() {
-        val city = City("ebisu","Japan")
+        val city = City(name="ebisu",country="Japan")
         this.cityController.createCity(city)
         Assertions.assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id"))))
                 .hasNumberOfRows(2)

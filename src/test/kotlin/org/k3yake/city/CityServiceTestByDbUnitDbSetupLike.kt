@@ -52,7 +52,7 @@ class CityServiceTestByDbUnitDbSetupLike {
 
     @Test
     fun test(){
-        cityService.create(City("notExistCityName", "notExistCoutry"))
+        cityService.create(City(name="notExistCityName", country="notExistCoutry"))
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
         val actual = databaseDataSet.getTable("city")
         val expect = table(dataSource,"city"){

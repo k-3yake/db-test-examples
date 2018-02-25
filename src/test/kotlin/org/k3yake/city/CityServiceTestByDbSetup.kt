@@ -49,7 +49,7 @@ class CityServiceTestByDbSetup {
 
     @Test
     fun 都市登録のテスト_同一の国かつ都市名の都市がない場合_登録が成功する() {
-        cityService.create(City("notExistCityName", "notExistCoutry"))
+        cityService.create(City(name="notExistCityName", country="notExistCoutry"))
         val table = Table(dataSource, "city", arrayOf(Table.Order.asc("id")))
         assertThat(table).row(1)
                 .value("name").isEqualTo("notExistCityName")

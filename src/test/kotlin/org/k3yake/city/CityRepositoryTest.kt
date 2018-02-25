@@ -24,7 +24,7 @@ class CityRepositoryTest {
     fun SavaTest(){
         val currentRowCount = Table(dataSource, "city").getRowsList().size
         val currentRowIndex = currentRowCount - 1
-        cityRepository.save(City("name1","country1"))
+        cityRepository.save(City(name="name1", country="country1"))
 
         Assertions.assertThat(Table(dataSource, "city"))
                 .hasNumberOfRows(currentRowCount + 1)
