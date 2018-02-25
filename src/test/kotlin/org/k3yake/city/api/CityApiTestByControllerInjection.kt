@@ -1,5 +1,6 @@
 package org.k3yake.city.api
 
+import com.ninja_squad.dbsetup_kotlin.dbSetup
 import org.assertj.db.api.Assertions
 import org.assertj.db.type.Table
 import org.junit.Before
@@ -40,6 +41,17 @@ class CityApiTestByControllerInjection {
     @Autowired
     @Qualifier("dataSource")
     lateinit var dataSource: DataSource
+
+    @Before
+    fun Befor(){
+        dbSetup(to = dataSource) {
+            deleteAllFrom("city")
+            insertInto("city"){
+                columns("country", "name", "state", "map")
+                values("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+            }
+        }.launch()
+    }
 
     @Test
     fun getTest() {

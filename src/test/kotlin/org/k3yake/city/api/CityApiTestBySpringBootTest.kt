@@ -1,5 +1,6 @@
 package org.k3yake.city.api
 
+import com.ninja_squad.dbsetup_kotlin.dbSetup
 import org.assertj.db.api.Assertions
 import org.assertj.db.type.Table
 import org.junit.Before
@@ -40,6 +41,13 @@ class CityApiTestBySpringBootTest {
     @Before
     fun setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        dbSetup(to = dataSource) {
+            deleteAllFrom("city")
+            insertInto("city"){
+                columns("country", "name", "state", "map")
+                values("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+            }
+        }.launch()
     }
 
     @Test
@@ -63,7 +71,6 @@ class CityApiTestBySpringBootTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         Assertions.assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id")))).row(1)
-                .value("id").isEqualTo(2)
                 .value("name").isEqualTo("ebisu")
                 .value("country").isEqualTo("Japan")
     }
