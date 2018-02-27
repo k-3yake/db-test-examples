@@ -3,6 +3,8 @@ package org.k3yake.city
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.k3yake.city.repository.City
+import org.k3yake.city.repository.CityRepository
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito

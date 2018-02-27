@@ -1,24 +1,23 @@
 package org.k3yake.city
 
+import org.k3yake.city.repository.City
+import org.k3yake.city.repository.CityRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.*
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import org.springframework.validation.Errors
 import org.springframework.validation.Validator
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.WebDataBinder
-import org.springframework.web.bind.annotation.InitBinder
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import javax.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpHeaders
-import org.springframework.web.context.request.WebRequest
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.MethodArgumentNotValidException
 
 
 /**
@@ -75,7 +74,7 @@ class CityValidator: Validator{
 class CityService {
 
     @Autowired
-    lateinit var cityRepository:CityRepository
+    lateinit var cityRepository: CityRepository
 
     fun findCity(): City {
         return cityRepository.findByNameAndCountryAllIgnoringCase("Brisbane","Australia")
@@ -86,27 +85,3 @@ class CityService {
     }
 }
 
-@org.springframework.stereotype.Repository
-interface CityRepository : JpaRepository<City,Long> {
-    fun findByNameAndCountryAllIgnoringCase(name: String, country: String): City
-}
-
-@Entity
-data class City(
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
-
-    @Column(nullable = false)
-    val name: String = "",
-
-    @Column(nullable = false)
-    val state: String = "",
-
-    @Column(nullable = false)
-    val country: String = "",
-
-    @Column(nullable = false)
-    val map: String = ""
-    ){
-}

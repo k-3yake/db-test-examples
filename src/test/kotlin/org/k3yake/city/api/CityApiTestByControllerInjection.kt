@@ -7,8 +7,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.k3yake.Application
-import org.k3yake.city.City
 import org.k3yake.city.CityController
+import org.k3yake.city.repository.City
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,4 +1,4 @@
-package org.k3yake.city
+package org.k3yake.city.repository
 
 import org.assertj.db.api.Assertions
 import org.assertj.db.type.Table
@@ -7,7 +7,6 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.transaction.annotation.Transactional
 import javax.sql.DataSource
 
 /**
@@ -17,14 +16,14 @@ import javax.sql.DataSource
 @SpringBootTest
 class CityRepositoryTest {
 
-    @Autowired lateinit var cityRepository:CityRepository
+    @Autowired lateinit var cityRepository: CityRepository
     @Autowired lateinit var dataSource:DataSource
 
     @Test
     fun SavaTest(){
         val currentRowCount = Table(dataSource, "city").getRowsList().size
         val currentRowIndex = currentRowCount - 1
-        cityRepository.save(City(name="name1", country="country1"))
+        cityRepository.save(City(name = "name1", country = "country1"))
 
         Assertions.assertThat(Table(dataSource, "city"))
                 .hasNumberOfRows(currentRowCount + 1)

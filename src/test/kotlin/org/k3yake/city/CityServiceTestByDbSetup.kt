@@ -1,25 +1,17 @@
 package org.k3yake.city
 
-import com.ninja_squad.dbsetup.DbSetup
-import com.ninja_squad.dbsetup.DbSetupTracker
-import com.ninja_squad.dbsetup.Operations
-import com.ninja_squad.dbsetup.Operations.deleteAllFrom
-import com.ninja_squad.dbsetup.destination.DataSourceDestination
-import org.junit.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import javax.sql.DataSource
-import org.springframework.beans.factory.annotation.Qualifier
-import com.ninja_squad.dbsetup.Operations.insertInto
 import com.ninja_squad.dbsetup_kotlin.dbSetup
-import com.ninja_squad.dbsetup_kotlin.launchWith
+import org.assertj.db.api.Assertions.assertThat
 import org.assertj.db.type.Table
 import org.junit.Before
-import org.junit.BeforeClass
+import org.junit.Test
 import org.junit.runner.RunWith
+import org.k3yake.city.repository.City
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import org.assertj.db.api.Assertions.assertThat
-import org.springframework.transaction.annotation.Transactional
+import javax.sql.DataSource
 
 
 /**

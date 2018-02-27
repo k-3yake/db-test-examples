@@ -18,6 +18,7 @@ import org.dbunit.dataset.IDataSet
 import org.dbunit.dataset.ReplacementDataSet
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder
 import org.dbunit.util.fileloader.XlsDataFileLoader
+import org.k3yake.city.repository.City
 
 
 /**
