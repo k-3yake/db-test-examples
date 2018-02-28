@@ -1,5 +1,6 @@
 package org.k3yake.city.repository
 
+import com.ninja_squad.dbsetup_kotlin.dbSetup
 import org.assertj.db.api.Assertions
 import org.assertj.db.type.Table
 import org.junit.Test
@@ -30,5 +31,38 @@ class CityRepositoryTest {
                 .row(currentRowIndex + 1)
                 .value("name").isEqualTo("name1")
                 .value("country").isEqualTo("country1")
+    }
+}
+
+@RunWith(SpringRunner::class)
+@SpringBootTest
+class PrefecturRepositoryTest {
+
+    @Autowired lateinit var prefectureRepository: PrefectureRepository
+    @Autowired lateinit var countryRepository: CountryRepository
+    @Autowired lateinit var dataSource:DataSource
+
+    @Test
+    fun SavaTest(){
+        dbSetup(to = dataSource) {
+            deleteAllFrom("country")
+            insertInto("country"){
+                columns("id", "name")
+                values(1, "Japan")
+            }
+        }.launch()
+        val tokyo = Prefectur(1, "Tokyo")
+        val osaka = Prefectur(2, "Osaka")
+        val country = countryRepository.getOne(1)
+        country.prefecturs.addAll(listOf(tokyo,osaka))
+        countryRepository.save(country)
+        Assertions.assertThat(Table(dataSource, "country"))
+                .hasNumberOfRows(1)
+                .row(0)
+                .value("name").isEqualTo("Japan")
+        Assertions.assertThat(Table(dataSource, "prefectur"))
+                .hasNumberOfRows(2)
+                .row(0).value("name").isEqualTo("Tokyo")
+                .row(1).value("name").isEqualTo("Osaka")
     }
 }
