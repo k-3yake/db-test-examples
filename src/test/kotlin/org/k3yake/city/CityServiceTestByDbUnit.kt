@@ -2,6 +2,7 @@ package org.k3yake.city
 
 import org.dbunit.Assertion
 import org.dbunit.database.DatabaseConnection
+import org.dbunit.dataset.DefaultDataSet
 import org.dbunit.dataset.excel.XlsDataSet
 import org.dbunit.operation.DatabaseOperation
 import org.junit.Before
@@ -13,12 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import java.io.File
 import javax.sql.DataSource
-import org.dbunit.dataset.ITable
-import org.dbunit.dataset.IDataSet
 import org.dbunit.dataset.ReplacementDataSet
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder
-import org.dbunit.util.fileloader.XlsDataFileLoader
 import org.k3yake.city.repository.City
+import org.k3yake.city.repository.Country
 
 
 /**
@@ -42,7 +40,13 @@ class CityServiceTestByDbUnit {
         try {
             // テストデータのインサート
             con = DatabaseConnection(dataSource.connection)
-            DatabaseOperation.CLEAN_INSERT.execute(con!!, XlsDataSet(File("src/test/resources/testData.xlsx")))
+            val xlsDataSet = XlsDataSet(File("src/test/resources/testData.xlsx"))
+            val city = DefaultDataSet(xlsDataSet.getTable("city"))
+            val country = DefaultDataSet(xlsDataSet.getTable("country"))
+            DatabaseOperation.DELETE_ALL.execute(con!!, city)
+            DatabaseOperation.DELETE_ALL.execute(con!!, country)
+            DatabaseOperation.INSERT.execute(con!!, country)
+            DatabaseOperation.INSERT.execute(con!!, city)
         }finally{
             con?.close()
         }
@@ -50,12 +54,11 @@ class CityServiceTestByDbUnit {
 
     @Test
     fun test(){
-        cityService.create(City(name="notExistCityName", country="notExistCoutry"))
+        cityService.create(City(name="notExistCityName", country= Country("notExistCoutry")))
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
-        val actualTable = databaseDataSet.getTable("city")
         val expectedDataSet = ReplacementDataSet(XlsDataSet(File("src/test/resources/testData_expect.xlsx")))
         expectedDataSet.addReplacementSubstring("[EmptyStr]","")
-        val expectedTable = expectedDataSet.getTable("city")
-        Assertion.assertEqualsIgnoreCols(expectedTable, actualTable, arrayOf("id"));
+        Assertion.assertEqualsIgnoreCols(expectedDataSet.getTable("city"), databaseDataSet.getTable("city"), arrayOf("id","country_id"));
+        Assertion.assertEqualsIgnoreCols(expectedDataSet.getTable("country"), databaseDataSet.getTable("country"), arrayOf("id"));
     }
 }

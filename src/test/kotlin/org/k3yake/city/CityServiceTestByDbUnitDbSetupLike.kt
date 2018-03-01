@@ -1,25 +1,20 @@
 package org.k3yake.city
 
-import org.assertj.db.api.Assertions
-import org.assertj.db.type.Table
 import org.dbunit.Assertion
 import org.dbunit.database.DatabaseConnection
 import org.dbunit.dataset.DefaultDataSet
 import org.dbunit.dataset.DefaultTable
 import org.dbunit.dataset.ITable
-import org.dbunit.dataset.ReplacementDataSet
-import org.dbunit.dataset.excel.XlsDataSet
 import org.dbunit.operation.DatabaseOperation
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.k3yake.city.repository.City
+import org.k3yake.city.repository.Country
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.transaction.annotation.Transactional
-import java.io.File
 import javax.sql.DataSource
 
 /**
@@ -41,11 +36,18 @@ class CityServiceTestByDbUnitDbSetupLike {
         var con: DatabaseConnection? = null
         try {
             con = DatabaseConnection(dataSource.connection)
-            val table = table(dataSource,"city"){
-                addColum("country", "name", "state", "map")
-                addValues("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+            val country = table(dataSource,"country"){
+                addColum("id", "name")
+                addValues(1,"Australia")
             }
-            DatabaseOperation.CLEAN_INSERT.execute(con!!, DefaultDataSet(table))
+            val city = table(dataSource,"city"){
+                addColum("name", "state", "map","country_id")
+                addValues("Brisbane", "Queensland", "-27.470933, 153.023502",1)
+            }
+            DatabaseOperation.DELETE_ALL.execute(con!!, DefaultDataSet(city))
+            DatabaseOperation.DELETE_ALL.execute(con!!, DefaultDataSet(country))
+            DatabaseOperation.INSERT.execute(con!!, DefaultDataSet(country))
+            DatabaseOperation.INSERT.execute(con!!, DefaultDataSet(city))
         }finally{
             con?.close()
         }
@@ -53,15 +55,20 @@ class CityServiceTestByDbUnitDbSetupLike {
 
     @Test
     fun test(){
-        cityService.create(City(name="notExistCityName", country="notExistCoutry"))
+        cityService.create(City(name="notExistCityName", country= Country("notExistCoutry")))
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
-        val actual = databaseDataSet.getTable("city")
-        val expect = table(dataSource,"city"){
-                    addColum("country", "name", "state", "map")
-                    addValues("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
-                    addValues("notExistCoutry", "notExistCityName", "", "")
+        val expectCountry = table(dataSource,"country"){
+                    addColum("name")
+                    addValues("Australia")
+                    addValues("notExistCoutry")
         }
-        Assertion.assertEqualsIgnoreCols(expect, actual, arrayOf("id"));
+        Assertion.assertEqualsIgnoreCols(expectCountry, databaseDataSet.getTable("country"), arrayOf("id"));
+        val expectCity = table(dataSource,"city"){
+            addColum("name", "state", "map")
+            addValues("Brisbane", "Queensland", "-27.470933, 153.023502")
+            addValues("notExistCityName", "", "")
+        }
+        Assertion.assertEqualsIgnoreCols(expectCity, databaseDataSet.getTable("city"), arrayOf("id","country_id"));
     }
 }
 

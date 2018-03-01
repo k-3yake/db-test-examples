@@ -2,6 +2,7 @@ package org.k3yake.city
 
 import org.k3yake.city.repository.City
 import org.k3yake.city.repository.CityRepository
+import org.k3yake.city.repository.CountryRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -28,9 +29,9 @@ import javax.validation.Valid
 class CityController: ResponseEntityExceptionHandler() {
 
 
-  override fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers:HttpHeaders, status:HttpStatus, request:WebRequest): ResponseEntity<Any> {
+    override fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers:HttpHeaders, status:HttpStatus, request:WebRequest): ResponseEntity<Any> {
       return ResponseEntity(ErrorDetails(ex.bindingResult.allErrors[0].defaultMessage!!), HttpStatus.BAD_REQUEST);
-  }
+    }
 
     @Autowired
     lateinit var cityService:CityService
@@ -41,8 +42,10 @@ class CityController: ResponseEntityExceptionHandler() {
     }
 
     @GetMapping("/city")
-    fun findCity() : City {
-        return cityService.findCity()
+    fun findCity() : CityResponse {
+
+        val findedCity = cityService.findCity()
+        return CityResponse(findedCity.name,findedCity.state,findedCity.map,findedCity.country.name)
     }
 
     @PostMapping("/city")
@@ -50,6 +53,8 @@ class CityController: ResponseEntityExceptionHandler() {
         cityService.create(city)
         return city
     }
+
+    data class CityResponse(val name:String,val state:String,val map:String,val country:String)
 }
 
 data class ErrorDetails(val message:String)
@@ -75,12 +80,19 @@ class CityService {
 
     @Autowired
     lateinit var cityRepository: CityRepository
+    @Autowired
+    lateinit var countryRepository: CountryRepository
+
 
     fun findCity(): City {
-        return cityRepository.findByNameAndCountryAllIgnoringCase("Brisbane","Australia")
+        val country = countryRepository.findByName("Australia")
+        return cityRepository.findByNameAndCountryId("Brisbane",country.id)
     }
 
     fun  create(city: City) {
+        if (!countryRepository.existsById(city.country.id)){
+            countryRepository.save(city.country)
+        }
         cityRepository.save(city)
     }
 }

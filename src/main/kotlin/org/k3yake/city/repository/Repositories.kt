@@ -10,24 +10,62 @@ import javax.persistence.*
 @org.springframework.stereotype.Repository
 interface CityRepository : JpaRepository<City,Long> {
     fun findByNameAndCountryAllIgnoringCase(name: String, country: String): City
+    fun findByNameAndCountryId(name: String,id: Long): City
 }
 
 @Entity
-public data class City(
+data class City(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+    @Column(nullable = false)
+    val name: String = "",
+    @Column(nullable = false)
+    val state: String = "",
+    @Column(nullable = false)
+    val map: String = "",
+    @ManyToOne
+    var country: Country = Country()
+){
+    constructor(name:String,country: String):this(){
 
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = 0,
+    }
+    fun country():String{
+        return this.country.name
+    }
+}
 
-        @Column(nullable = false)
-        val name: String = "",
+@org.springframework.stereotype.Repository
+interface PrefectureRepository : JpaRepository<Prefectur,Long> { }
 
-        @Column(nullable = false)
-        val state: String = "",
+@org.springframework.stereotype.Repository
+interface CountryRepository : JpaRepository<Country,Long> {
+    fun findByName(name: String):Country
+}
 
-        @Column(nullable = false)
-        val country: String = "",
-
-        @Column(nullable = false)
-        val map: String = ""
+@Entity
+class Prefectur(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id:Long = 0,
+    @Column(nullable = false)
+    val name: String = "",
+    @ManyToOne
+    var country: Country = Country()
 ){
 }
+
+@Entity
+data class Country(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+    @Column(nullable = false,unique = true)
+    val name: String = ""
+/*
+    @OneToMany(cascade = arrayOf(CascadeType.ALL),fetch = FetchType.EAGER)
+    val prefecturs:MutableList<Prefectur> = mutableListOf()
+*/
+){
+    constructor(name: String):this(id = 0,name = name)
+}
+
+
+

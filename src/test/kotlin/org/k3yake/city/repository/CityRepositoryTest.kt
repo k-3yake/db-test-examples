@@ -19,21 +19,60 @@ class CityRepositoryTest {
 
     @Autowired lateinit var cityRepository: CityRepository
     @Autowired lateinit var dataSource:DataSource
+    @Autowired lateinit var countryRepository: CountryRepository
 
     @Test
-    fun SavaTest(){
-        val currentRowCount = Table(dataSource, "city").getRowsList().size
-        val currentRowIndex = currentRowCount - 1
-        cityRepository.save(City(name = "name1", country = "country1"))
+    fun Cityの保存のテスト_Countryがまだない場合_CityとCountryが登録される(){
+        //準備
+        dbSetup(to = dataSource) {
+            deleteAllFrom("city","country")
+        }.launch()
 
+        //実行
+        val country = Country(name = "notExistCountry")
+        countryRepository.save(country)
+        val city = City(name = "name1", country = country)
+        cityRepository.save(city)
+
+        //確認
+        Assertions.assertThat(Table(dataSource, "country"))
+                .hasNumberOfRows(1)
+                .row(0)
+                .value("name").isEqualTo("notExistCountry")
         Assertions.assertThat(Table(dataSource, "city"))
-                .hasNumberOfRows(currentRowCount + 1)
-                .row(currentRowIndex + 1)
+                .hasNumberOfRows(1)
+                .row(0)
                 .value("name").isEqualTo("name1")
-                .value("country").isEqualTo("country1")
+    }
+
+
+    @Test
+    fun Cityの保存のテスト_countryが既にある場合_Cityのみが登録される(){
+        //準備
+        dbSetup(to = dataSource) {
+            deleteAllFrom("city","country")
+            insertInto("country"){
+                columns("id", "name")
+                values(1, "Japan")
+            }
+        }.launch()
+
+        //実行
+        val city = City(name = "name1", country = countryRepository.findById(1).get())
+        cityRepository.save(city)
+
+        //確認
+        Assertions.assertThat(Table(dataSource, "country"))
+                .hasNumberOfRows(1)
+        Assertions.assertThat(Table(dataSource, "city"))
+                .hasNumberOfRows(1)
+                .row(0)
+                .value("name").isEqualTo("name1")
+                .value("country_id").isEqualTo(1)
     }
 }
 
+/*
 @RunWith(SpringRunner::class)
 @SpringBootTest
 class PrefecturRepositoryTest {
@@ -44,18 +83,21 @@ class PrefecturRepositoryTest {
 
     @Test
     fun SavaTest(){
+        //事前準備
         dbSetup(to = dataSource) {
-            deleteAllFrom("country")
+            deleteAllFrom("city","country")
             insertInto("country"){
                 columns("id", "name")
                 values(1, "Japan")
             }
         }.launch()
-        val tokyo = Prefectur(1, "Tokyo")
-        val osaka = Prefectur(2, "Osaka")
+        val tokyo = Prefectur(name="Tokyo")
+        val osaka = Prefectur(name="Osaka")
         val country = countryRepository.getOne(1)
-        country.prefecturs.addAll(listOf(tokyo,osaka))
-        countryRepository.save(country)
+        tokyo.country = country
+        prefectureRepository.saveAndFlush(tokyo)
+        osaka.country = country
+        prefectureRepository.saveAndFlush(osaka)
         Assertions.assertThat(Table(dataSource, "country"))
                 .hasNumberOfRows(1)
                 .row(0)
@@ -65,4 +107,4 @@ class PrefecturRepositoryTest {
                 .row(0).value("name").isEqualTo("Tokyo")
                 .row(1).value("name").isEqualTo("Osaka")
     }
-}
+}*/

@@ -42,10 +42,14 @@ class CityApiTestBySpringBootTest {
     fun setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
         dbSetup(to = dataSource) {
-            deleteAllFrom("city")
+            deleteAllFrom("city","country")
+            insertInto("country"){
+                columns("id","name")
+                values(1,"Australia")
+            }
             insertInto("city"){
-                columns("country", "name", "state", "map")
-                values("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                columns("country_id", "name", "state", "map")
+                values(1, "Brisbane", "Queensland", "-27.470933, 153.023502")
             }
         }.launch()
     }
@@ -72,7 +76,8 @@ class CityApiTestBySpringBootTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
         Assertions.assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id")))).row(1)
                 .value("name").isEqualTo("ebisu")
-                .value("country").isEqualTo("Japan")
+        Assertions.assertThat(Table(dataSource, "country", arrayOf(Table.Order.asc("id")))).row(1)
+                .value("name").isEqualTo("Japan")
     }
 
     @Test

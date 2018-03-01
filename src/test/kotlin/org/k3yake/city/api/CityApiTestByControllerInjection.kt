@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.k3yake.Application
 import org.k3yake.city.CityController
 import org.k3yake.city.repository.City
+import org.k3yake.city.repository.Country
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,10 +46,15 @@ class CityApiTestByControllerInjection {
     @Before
     fun Befor(){
         dbSetup(to = dataSource) {
-            deleteAllFrom("city")
+            deleteAllFrom("city","country")
+            insertInto("country"){
+                columns("id","name")
+                values(1,"Australia")
+            }
+
             insertInto("city"){
-                columns("country", "name", "state", "map")
-                values("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                columns("name", "state", "map","country_id")
+                values("Brisbane", "Queensland", "-27.470933, 153.023502",1)
             }
         }.launch()
     }
@@ -64,12 +70,14 @@ class CityApiTestByControllerInjection {
 
     @Test
     fun createTest() {
-        val city = City(name="ebisu",country="Japan")
+        val city = City(name="ebisu",country= Country("Japan"))
         this.cityController.createCity(city)
         Assertions.assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id"))))
                 .hasNumberOfRows(2)
                 .row(1)
                 .value("name").isEqualTo("ebisu")
-                .value("country").isEqualTo("Japan")
+        Assertions.assertThat(Table(dataSource, "country"))
+                .hasNumberOfRows(2)
+
     }
 }

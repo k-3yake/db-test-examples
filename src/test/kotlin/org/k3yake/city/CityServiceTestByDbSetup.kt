@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.k3yake.city.repository.City
+import org.k3yake.city.repository.Country
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
@@ -31,20 +32,26 @@ class CityServiceTestByDbSetup {
     @Before
     fun Befor(){
         dbSetup(to = dataSource) {
-            deleteAllFrom("city")
+            deleteAllFrom("city","country")
+            insertInto("country"){
+                columns("id","name").values(1,"Australia")
+            }
+
             insertInto("city"){
-                columns("country", "name", "state", "map")
-                values("Australia", "Brisbane", "Queensland", "-27.470933, 153.023502")
+                columns("name", "state", "map","country_id")
+                values("Brisbane", "Queensland", "-27.470933, 153.023502",1)
             }
         }.launch()
     }
 
     @Test
     fun 都市登録のテスト_同一の国かつ都市名の都市がない場合_登録が成功する() {
-        cityService.create(City(name="notExistCityName", country="notExistCoutry"))
-        val table = Table(dataSource, "city", arrayOf(Table.Order.asc("id")))
-        assertThat(table).row(1)
+        cityService.create(City(name="notExistCityName", country= Country("notExistCountry")))
+        assertThat(Table(dataSource, "city", arrayOf(Table.Order.asc("id"))))
+                .row(1)
                 .value("name").isEqualTo("notExistCityName")
-                .value("country").isEqualTo("notExistCoutry")
+        assertThat(Table(dataSource, "country", arrayOf(Table.Order.asc("id"))))
+                .row(1)
+                .value("name").isEqualTo("notExistCountry")
     }
 }

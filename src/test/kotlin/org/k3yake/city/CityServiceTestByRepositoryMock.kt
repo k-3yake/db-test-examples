@@ -5,6 +5,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.k3yake.city.repository.City
 import org.k3yake.city.repository.CityRepository
+import org.k3yake.city.repository.Country
+import org.k3yake.city.repository.CountryRepository
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -24,13 +26,19 @@ class CityServiceTestByRepositoryMock {
     @Mock
     lateinit var cityRepository: CityRepository
 
+    @Mock
+    lateinit var countryRepository: CountryRepository
+
     @Test
     fun City取得ののテスト_Cityを返す() {
-        Mockito.doReturn(City(name="name1",country="country1"))
+        Mockito.doReturn(Country(1,"Australia"))
+                .`when`(countryRepository)
+                .findByName("Australia")
+        Mockito.doReturn(City(name="name1",country = Country("country1")))
                 .`when`(cityRepository)
-                .findByNameAndCountryAllIgnoringCase("Brisbane","Australia")
+                .findByNameAndCountryId("Brisbane",1)
         val city = cityService.findCity()
         assertEquals("name1",city.name)
-        assertEquals("country1",city.country)
+        assertEquals("country1",city.country.name)
     }
 }
