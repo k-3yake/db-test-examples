@@ -15,8 +15,7 @@ import javax.sql.DataSource
  */
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class CityRepositoryTest {
-
+class CityRepositoryTestByDbSetup {
     @Autowired lateinit var cityRepository: CityRepository
     @Autowired lateinit var dataSource:DataSource
     @Autowired lateinit var countryRepository: CountryRepository
@@ -44,7 +43,6 @@ class CityRepositoryTest {
                 .row(0)
                 .value("name").isEqualTo("name1")
     }
-
 
     @Test
     fun Cityの保存のテスト_countryが既にある場合_Cityのみが登録される(){

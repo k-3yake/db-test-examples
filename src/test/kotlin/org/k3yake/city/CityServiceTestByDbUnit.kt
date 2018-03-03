@@ -22,7 +22,6 @@ import org.k3yake.city.repository.Country
 /**
  * Created by katsuki-miyake on 18/02/18.
  */
-
 @RunWith(SpringRunner::class)
 @SpringBootTest
 class CityServiceTestByDbUnit {

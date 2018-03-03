@@ -1,7 +1,5 @@
 package org.k3yake.city.repository
 
-import org.assertj.db.api.Assertions
-import org.assertj.db.type.Table
 import org.dbunit.Assertion
 import org.dbunit.database.DatabaseConnection
 import org.dbunit.dataset.DefaultDataSet
