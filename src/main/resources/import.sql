@@ -1,9 +1,3 @@
---
--- Sample dataset containing a number of Hotels in various Cities across the world.  The reviews are entirely fictional :)
---
+insert into country(id,name) values (1,'Australia')
+insert into city(id,country_id, name, state, map) values (1,1,h 'Brisbane', 'Queensland', '-27.470933, 153.023502')
 
--- =================================================================================================
--- AUSTRALIA
-
--- Brisbane
--- insert into city(country, name, state, map) values ('Australia', 'Brisbane', 'Queensland', '-27.470933, 153.023502')
