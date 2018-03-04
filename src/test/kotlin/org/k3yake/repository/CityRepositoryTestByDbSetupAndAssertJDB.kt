@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import javax.sql.DataSource
+import org.assertj.core.api.Assertions.*
 
 /**
  * Created by katsuki-miyake on 18/02/24.
@@ -24,6 +25,28 @@ import javax.sql.DataSource
 class CityRepositoryTestByDbSetupAndAssertJDB {
     @Autowired lateinit var cityDomainRepository: CityDomainRepository
     @Autowired lateinit var dataSource:DataSource
+
+    @Test
+    fun 名前によるCity取得のテスト_名前の一致したcityを返す(){
+        //準備
+        dbSetup(to = dataSource) {
+            deleteAllFrom("city","country")
+            insertInto("country"){
+                columns("id", "name")
+                values(1, "Japan")
+            }
+            insertInto("city"){
+                columns("id", "name", "country_id")
+                values(1, "Ebisu", 1)
+            }
+        }.launch()
+
+        //実行
+        val city = cityDomainRepository.findCity("Ebisu")
+
+        //確認
+        assertThat(city).isEqualTo(CityDomain(1,"Ebisu","Japan"))
+    }
 
     @Test
     fun Cityの保存のテスト_Countryがまだない場合_CityとCountryが登録される_テーブルの状態確認によるテスト(){

@@ -10,6 +10,7 @@ import org.k3yake.repository.CityDomainRepository
 import org.k3yake.repository.CityRepository
 import org.k3yake.repository.Country
 import org.k3yake.repository.CountryRepository
+import org.assertj.core.api.Assertions.*
 
 /**
  * Created by katsuki-miyake on 18/02/24.
@@ -21,6 +22,21 @@ class CityRepositoryTestByMock {
     lateinit var cityReposiotry: CityRepository
     @Injectable
     lateinit var countryRepository: CountryRepository
+
+    @Test
+    fun 名前によるCity取得のテスト_名前の一致したcityを返す(){
+        //準備
+        val cityDomain = CityDomain(id=1, name="ebisu", country="Japan")
+        object: Expectations() { init{
+            cityReposiotry.findByName("ebisu");result=City(id=1,name="ebisu",country=Country("Japan"))
+        }}
+
+        //実行
+        val city = cityDomainRepository.findCity("ebisu")
+
+        //確認
+        assertThat(city).isEqualTo(CityDomain(1,"ebisu","Japan"))
+    }
 
     @Test
     fun Cityの保存のテスト_Countryがまだない場合_CityとCountryが登録される(){

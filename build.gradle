@@ -41,4 +41,6 @@ dependencies {
 	testCompile 'org.assertj:assertj-db:1.2.0'
 	testCompile 'org.dbunit:dbunit:2.5.1'
 	testCompile 'org.jmockit:jmockit:1.8'
+	testCompile 'org.assertj:assertj-core:3.9.1'
+
 }

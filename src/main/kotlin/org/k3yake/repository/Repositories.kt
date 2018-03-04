@@ -15,8 +15,9 @@ class CityDomainRepository {
     @Autowired lateinit var cityRepository: CityRepository
     @Autowired lateinit var countryRepository: CountryRepository
 
-    fun findCity(name: String): City {
-        return cityRepository.findByName(name)
+    fun findCity(name: String): CityDomain {
+        val city = cityRepository.findByName(name)
+        return CityDomain(city.id,city.name,city.country.name)
     }
 
     fun create(city: CityDomain) {
@@ -39,12 +40,12 @@ interface CityRepository : JpaRepository<City,Long> {
 @Entity
 data class City(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Int = 0,
     @Column(nullable = false)
     val name: String = "",
-    @Column(nullable = false)
+    @Column
     val state: String = "",
-    @Column(nullable = false)
+    @Column
     val map: String = "",
     @ManyToOne
     var country: Country = Country()
