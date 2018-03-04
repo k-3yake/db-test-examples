@@ -40,4 +40,5 @@ dependencies {
 	testCompile 'com.ninja-squad:DbSetup-kotlin:2.1.0'
 	testCompile 'org.assertj:assertj-db:1.2.0'
 	testCompile 'org.dbunit:dbunit:2.5.1'
+	testCompile 'org.jmockit:jmockit:1.8'
 }
