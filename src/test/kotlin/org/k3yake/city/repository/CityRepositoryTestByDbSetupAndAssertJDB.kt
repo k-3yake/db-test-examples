@@ -17,9 +17,8 @@ import javax.sql.DataSource
 @RunWith(SpringRunner::class)
 @SpringBootTest
 class CityRepositoryTestByDbSetupAndAssertJDB {
-    @Autowired lateinit var cityRepository: CityRepository
+    @Autowired lateinit var cityDomainRepository: CityDomainRepository
     @Autowired lateinit var dataSource:DataSource
-    @Autowired lateinit var countryRepository: CountryRepository
 
     @Test
     fun Cityの保存のテスト_Countryがまだない場合_CityとCountryが登録される_テーブルの状態確認によるテスト(){
@@ -29,10 +28,8 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
         }.launch()
 
         //実行
-        val country = Country(name = "notExistCountry")
-        countryRepository.save(country)
-        val city = City(name = "name1", country = country)
-        cityRepository.save(city)
+        val city = CityDomain(name="name1",country = "notExistCountry")
+        cityDomainRepository.create(city)
 
         //確認
         Assertions.assertThat(Table(dataSource, "country"))
@@ -54,15 +51,12 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
         val changes = Changes(dataSource).setStartPointNow() //AssetJ-DBによる変更記録開始
 
         //実行
-        val country = Country(name = "notExistCountry")
-        countryRepository.save(country)
-        val city = City(name = "name1", country = country)
-        cityRepository.save(city)
+        cityDomainRepository.create(CityDomain(name="name1", country="notExistCountry"))
 
         //確認
         changes.setEndPointNow() //AssetJ-DBによる変更記録終了
         Assertions.assertThat(changes)
-                .hasNumberOfChanges(1)
+                .hasNumberOfChanges(2)
                 .changeOnTable("country")
                 .isCreation()
                 .rowAtEndPoint()
@@ -84,10 +78,9 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
                 values(1, "Japan")
             }
         }.launch()
-        val city = City(name = "name1", country = countryRepository.findById(1).get())
 
         //実行
-        cityRepository.save(city)
+        cityDomainRepository.create(CityDomain(name="name1", country="Japan"))
 
         //確認
         Assertions.assertThat(Table(dataSource, "country"))
@@ -110,13 +103,12 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
             }
         }.launch()
         val changes = Changes(dataSource).setStartPointNow() //AssetJ-DBによる変更記録開始
-        val city = City(name = "name1", country = countryRepository.findById(1).get())
 
         //実行
-        cityRepository.save(city)
+        cityDomainRepository.create(CityDomain(name="name1", country="Japan"))
 
         //確認
-        changes.setEndPointNow();
+        changes.setEndPointNow()
         Assertions.assertThat(changes)
                 .hasNumberOfChanges(1)//下のアサーションと組み合わせて、cityテーブルのみ変更されていること（countryが変更されていないこと）が確認出来ている
                 .changeOnTable("city")

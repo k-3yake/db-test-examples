@@ -23,9 +23,8 @@ import javax.sql.DataSource
 @RunWith(SpringRunner::class)
 @SpringBootTest
 class CityRepositoryTestByDbUnit {
-    @Autowired lateinit var cityRepository: CityRepository
+    @Autowired lateinit var cityDomainRepository: CityDomainRepository
     @Autowired lateinit var dataSource:DataSource
-    @Autowired lateinit var countryRepository: CountryRepository
 
     @Test
     fun Cityの保存のテスト_Countryがまだない場合_CityとCountryが登録される(){
@@ -41,10 +40,7 @@ class CityRepositoryTestByDbUnit {
         }
 
         //実行
-        val country = Country(name = "notExistCoutry")
-        countryRepository.save(country)
-        val city = City(name = "notExistCityName", country = country)
-        cityRepository.save(city)
+        cityDomainRepository.create(CityDomain(name = "notExistCityName",country = "notExistCoutry"))
 
         //確認
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
@@ -67,7 +63,7 @@ class CityRepositoryTestByDbUnit {
         }
 
         //実行
-        cityRepository.save(City(name = "notExistCityName", country = countryRepository.findById(1).get()))
+        cityDomainRepository.create(CityDomain(name = "notExistCityName",country = "Japan"))
 
         //確認
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
