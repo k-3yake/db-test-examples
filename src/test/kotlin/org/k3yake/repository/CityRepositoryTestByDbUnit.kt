@@ -8,11 +8,12 @@ import org.dbunit.dataset.excel.XlsDataSet
 import org.dbunit.operation.DatabaseOperation
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.k3yake.domain.CityDomain
+import org.k3yake.Application
+import org.k3yake.repository.CityDomainRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.io.Closeable
 import java.io.File
@@ -44,7 +45,7 @@ class CityRepositoryTestByDbUnit {
         }
 
         //実行
-        cityDomainRepository.create(CityDomain(name = "notExistCityName",country = "notExistCoutry"))
+        cityDomainRepository.create(CityDomain(name = "notExistCityName", country = "notExistCoutry"))
 
         //確認
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()
@@ -67,7 +68,7 @@ class CityRepositoryTestByDbUnit {
         }
 
         //実行
-        cityDomainRepository.create(CityDomain(name = "notExistCityName",country = "Japan"))
+        cityDomainRepository.create(CityDomain(name = "notExistCityName", country = "Japan"))
 
         //確認
         val databaseDataSet = DatabaseConnection(dataSource.connection).createDataSet()

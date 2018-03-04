@@ -1,4 +1,4 @@
-package org.k3yake.city.repository
+package org.k3yake.domain
 
 /**
  * Created by katsuki-miyake on 18/03/04.

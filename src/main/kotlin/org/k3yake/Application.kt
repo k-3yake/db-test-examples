@@ -1,4 +1,4 @@
-package org.k3yake.city.repository
+package org.k3yake
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

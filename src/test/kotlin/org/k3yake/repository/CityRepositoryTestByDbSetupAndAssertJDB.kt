@@ -6,6 +6,9 @@ import org.assertj.db.type.Changes
 import org.assertj.db.type.Table
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.k3yake.domain.CityDomain
+import org.k3yake.Application
+import org.k3yake.repository.CityDomainRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,7 +33,7 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
         }.launch()
 
         //実行
-        val city = CityDomain(name="name1",country = "notExistCountry")
+        val city = CityDomain(name = "name1", country = "notExistCountry")
         cityDomainRepository.create(city)
 
         //確認
@@ -53,7 +56,7 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
         val changes = Changes(dataSource).setStartPointNow() //AssetJ-DBによる変更記録開始
 
         //実行
-        cityDomainRepository.create(CityDomain(name="name1", country="notExistCountry"))
+        cityDomainRepository.create(CityDomain(name = "name1", country = "notExistCountry"))
 
         //確認
         changes.setEndPointNow() //AssetJ-DBによる変更記録終了
@@ -82,7 +85,7 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
         }.launch()
 
         //実行
-        cityDomainRepository.create(CityDomain(name="name1", country="Japan"))
+        cityDomainRepository.create(CityDomain(name = "name1", country = "Japan"))
 
         //確認
         Assertions.assertThat(Table(dataSource, "country"))
@@ -107,7 +110,7 @@ class CityRepositoryTestByDbSetupAndAssertJDB {
         val changes = Changes(dataSource).setStartPointNow() //AssetJ-DBによる変更記録開始
 
         //実行
-        cityDomainRepository.create(CityDomain(name="name1", country="Japan"))
+        cityDomainRepository.create(CityDomain(name = "name1", country = "Japan"))
 
         //確認
         changes.setEndPointNow()

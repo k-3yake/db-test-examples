@@ -1,19 +1,15 @@
-package org.k3yake.city.repository
+package org.k3yake.repository
 
-import com.ninja_squad.dbsetup_kotlin.dbSetup
 import mockit.Expectations
 import mockit.Injectable
 import mockit.Tested
-import org.assertj.db.api.Assertions
-import org.assertj.db.type.Changes
-import org.assertj.db.type.Table
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit4.SpringRunner
-import javax.sql.DataSource
+import org.k3yake.domain.CityDomain
+import org.k3yake.repository.City
+import org.k3yake.repository.CityDomainRepository
+import org.k3yake.repository.CityRepository
+import org.k3yake.repository.Country
+import org.k3yake.repository.CountryRepository
 
 /**
  * Created by katsuki-miyake on 18/02/24.
@@ -33,11 +29,11 @@ class CityRepositoryTestByMock {
             val country = Country("notExistCountry")
             countryRepository.findByName(country.name); result = null
             countryRepository.save(country); result = country
-            cityReposiotry.save(City(name="name1",country = country))
+            cityReposiotry.save(City(name = "name1", country = country))
         }}
 
         //実行
-        val city = CityDomain(name="name1",country = "notExistCountry")
+        val city = CityDomain(name = "name1", country = "notExistCountry")
         cityDomainRepository.create(city)
     }
 
@@ -47,10 +43,10 @@ class CityRepositoryTestByMock {
         object: Expectations() { init{
             val country = Country("Japan")
             countryRepository.findByName(country.name); result = country
-            cityReposiotry.save(City(name="name1",country = country))
+            cityReposiotry.save(City(name = "name1", country = country))
         }}
 
         //実行
-        cityDomainRepository.create(CityDomain(name="name1", country="Japan"))
+        cityDomainRepository.create(CityDomain(name = "name1", country = "Japan"))
     }
 }

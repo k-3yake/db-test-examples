@@ -8,16 +8,6 @@
 * APIレイヤーテスト（Springでバリデーションやらリクエストの組み立てやらしている場合）
 
 #DOING
-プロダクション起動時のDB設定
-   gradelでテスト開始時にdocker起動とmysqlのユーザーとスキーマを作成しそこにつなげるようにする
 
 #TODO
-
 コンテナ起動高速化
-HibernateValidatorを使えば上手く行くか？
-バリデーションエラーをもうちょっとマシな例にする
-DBのテストとインテグレーションテストのプロジェクトを分ける
-* springを使用したユニットテスト、インテグレーションテスト、APIレイヤーテストの例のプロジェクトを作成
-    ユニットテスト(Junit,AssertJ,Jmocikt)
-    インテグレーションテスト(ユニットテストのやつ + DbSetup(RepositoryとDBのインテグレーション),),SpringTestRunner
-    APIレイヤーテスト(ユニットテストのやつ + spring-boot-test(DBSetup等は使わない))postのテストをDBまで見るか、再度findするか検討（APIの振る舞いのテストなのでDBを見ないのが正しい気がする）
