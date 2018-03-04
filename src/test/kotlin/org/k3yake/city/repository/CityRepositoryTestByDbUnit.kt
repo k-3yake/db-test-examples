@@ -9,7 +9,10 @@ import org.dbunit.operation.DatabaseOperation
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import java.io.Closeable
 import java.io.File
@@ -21,7 +24,8 @@ import javax.sql.DataSource
  * Created by katsuki-miyake on 18/03/03.
  */
 @RunWith(SpringRunner::class)
-@SpringBootTest
+@SpringBootTest(classes = arrayOf(Application::class))
+@AutoConfigureTestDatabase
 class CityRepositoryTestByDbUnit {
     @Autowired lateinit var cityDomainRepository: CityDomainRepository
     @Autowired lateinit var dataSource:DataSource
