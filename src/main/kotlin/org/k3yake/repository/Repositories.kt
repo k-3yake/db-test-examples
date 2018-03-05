@@ -22,12 +22,11 @@ class CityDomainRepository {
 
     fun create(city: CityDomain) {
         val existCountry = countryRepository.findByName(city.country)
-        if(existCountry == null){
-            val newCountry = countryRepository.save(Country(name = city.country))
-            cityRepository.save(City(name = city.name, country = newCountry))
-        } else {
+        existCountry?.let {
             cityRepository.save(City(name = city.name, country = existCountry))
+            return
         }
+        cityRepository.save(City(name = city.name, country = countryRepository.save(Country(name = city.country))))
     }
 }
 

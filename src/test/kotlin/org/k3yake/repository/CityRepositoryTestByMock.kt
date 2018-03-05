@@ -26,7 +26,6 @@ class CityRepositoryTestByMock {
     @Test
     fun 名前によるCity取得のテスト_名前の一致したcityを返す(){
         //準備
-        val cityDomain = CityDomain(id=1, name="ebisu", country="Japan")
         object: Expectations() { init{
             cityReposiotry.findByName("ebisu");result=City(id=1,name="ebisu",country=Country("Japan"))
         }}
